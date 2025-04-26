@@ -1,6 +1,6 @@
 const express = require('express')
-const userMiddleware = require('./src/api/middleware/userMiddleware')
-const userController = require('./src/api/controllers/userController')
+const mid = require('./src/api/middleware/taskMiddleware')
+const con = require('./src/api/controllers/taskController')
 const app = express()
 const port = 3000
 
@@ -17,11 +17,11 @@ app.get('/', (request, response) => {
 
 
 
-app.get('/users', userController.getAllUsers)
-app.get('/users/:id', userMiddleware.validateUserID, userMiddleware.validateUserExists, userController.getUserById)
-app.post('/users', userMiddleware.validateUserSchema, userController.createUser)
-app.put('/users/:id', userMiddleware.validateUserID, userMiddleware.validateUserExists, userMiddleware.validateUserSchema, userController.updateUser)
-app.delete('/users/:id', userMiddleware.validateUserID, userMiddleware.validateUserExists, userController.removeUser)
+app.get('/tasks', con.getAllTasks)
+app.get('/tasks/:id', mid.validateTaskID, mid.validateTaskExists, con.getTaskById)
+app.post('/tasks', mid.validateTaskSchema, con.createTask)
+app.put('/tasks/:id', mid.validateTaskID, mid.validateTaskExists, con.changeTaskStatus)
+app.delete('/tasks/:id', mid.validateTaskID, mid.validateTaskExists, con.removeTask)
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`)
