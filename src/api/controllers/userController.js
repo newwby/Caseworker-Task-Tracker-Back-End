@@ -1,10 +1,9 @@
-const { json } = require('express')
-const userService = require('../services/userService')
+const taskService = require('../services/taskService')
 
-const getAllUsers = async (request, response) => {
+const getAllTasks = async (request, response) => {
   try {
-    const users = await userService.fetchAllUsers()
-    response.status(200).json({"data": users })
+    const tasks = await taskService.fetchAllTasks()
+    response.status(200).json({"data": tasks })
   }
   catch (error) {
     response.status(500).json({"error": error.message, "status": 500})
@@ -12,10 +11,10 @@ const getAllUsers = async (request, response) => {
 }
 
 
-const getUserById = async (request, response) => {
+const getTaskById = async (request, response) => {
     try {
-      const user = await userService.fetchUser(request.id)
-      response.status(200).json({"data": user})
+      const task = await taskService.fetchTask(request.id)
+      response.status(200).json({"data": task})
     }
     catch (error) {
       response.status(500).json({"error": error.message, "status": 500})
@@ -23,11 +22,11 @@ const getUserById = async (request, response) => {
 }
 
 
-const createUser = async (request, response) => {
+const createTask = async (request, response) => {
   try {
-    const { name, email } = request.body
-    const user = await userService.insertUser(name, email)
-    response.status(201).json({"data": user})
+    const { title, description, status, due_date } = request.body
+    const task = await taskService.insertTask(title, description, status, due_date)
+    response.status(201).json({"data": task})
     
   }
   catch (error) {
@@ -36,11 +35,11 @@ const createUser = async (request, response) => {
 }
 
 
-const updateUser = async (request, response) => {
+const changeTaskStatus = async (request, response) => {
     try {
-      const { name, email } = request.body
-      const user = await userService.insertUser(request.id, name, email)
-      response.status(200).json({"data": user})
+      const { status } = request.body
+      const task = await taskService.updateTaskStatus(request.id, status)
+      response.status(200).json({"data": task})
     }
     catch (error) {
       response.status(500).json({"error": error.message, "status": 500})
@@ -48,10 +47,9 @@ const updateUser = async (request, response) => {
 }
 
 
-const removeUser = async (request, response) => {
+const removeTask = async (request, response) => {
     try {
-      // add middleware validation for if user exists and returns different status if not (404)
-      const user = await userService.deleteUser(request.id)
+      const _task = await taskService.deleteTask(request.id)
       response.status(204).send()
     }
     catch (error) {
@@ -61,9 +59,9 @@ const removeUser = async (request, response) => {
 
 
 module.exports = {
-    getAllUsers,
-    getUserById,
-    createUser,
-    updateUser,
-    removeUser,
+    getAllTasks,
+    getTaskById,
+    createTask,
+    changeTaskStatus,
+    removeTask,
 }
