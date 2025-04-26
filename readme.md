@@ -6,6 +6,8 @@
 1. CREATE ROLE caseworker WITH LOGIN PASSWORD 'password';
 1. ALTER USER caseworker CREATEDB;
 
+**As I'm sure you're aware - you should change that sample username, and that password is strongly discouraged.**
+
 ### Exit PostgreSQL from previous session, log in as 'caseworker' user & create the tasks database.
 
 1. \q
