@@ -1,22 +1,23 @@
-const userService = require('../services/userService')
+const taskService = require('../services/taskService')
 
-const validateUserExists = async (request, response, next) => {
+const validateTaskExists = async (request, response, next) => {
     try {
-        const user = await userService.fetchUser(request.id)
-        if (!user) {
-            return response.status(404).json({"error": "User not found", "status": 404})
+        const task = await taskService.fetchTask(request.id)
+        if (!task) {
+            return response.status(404).json({"error": "Task not found", "status": 404})
         }
         next()
     } catch (error) {
-        response.status(500).json({"error": "Could not validate user.", "status": 500})
+        response.status(500).json({"error": "Could not validate task.", "status": 500})
     }
 }
 
 
-const validateUserID = async (request, response, next) => {
+// chain with validateTaskExists
+const validateTaskID = async (request, response, next) => {
   const request_id = parseInt(request.params.id)
   if (isNaN(request_id)) {
-    response.status(400).json({"error": `Could not validate user id ${request_id}.`, "status": 400})
+    return response.status(400).json({"error": `Could not validate task id ${request_id}.`, "status": 400})
   }
   else {
     request.id = request_id
@@ -24,16 +25,16 @@ const validateUserID = async (request, response, next) => {
   }
 }
 
-const validateUserSchema = async (request, response, next) => {
-    const { name, email } = request.body
-    if (!name || !email) {
-        return response.status(400).json({ "error": "Missing required fields: name and email", "status": 400 })
+const validateTaskSchema = async (request, response, next) => {
+    const { title, description, status, due_date } = request.body
+    if (!title || !description|| !status|| !due_date) {
+        return response.status(400).json({ "error": "Missing required fields in request", "status": 400 })
     }
   next()
 }
 
 module.exports = {
-    validateUserExists,
-    validateUserID,
-    validateUserSchema,
+    validateTaskExists,
+    validateTaskID,
+    validateTaskSchema,
 }
