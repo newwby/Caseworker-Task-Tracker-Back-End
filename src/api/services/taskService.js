@@ -47,8 +47,13 @@ async function fetchTask(arg_id) {
 
 async function insertTask(task_title, task_desc, task_status, task_due) {
   return new Promise((resolve, reject) => {
-    pool.query(`INSERT INTO tasks (title, description, status, due_date) VALUES ($1, $2, $3, $4) RETURNING *`,\
-          [task_title, task_desc, task_status, task_due], (error, results) => {
+    pool.query(`
+      INSERT INTO tasks (title, description, status, due_date)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
+      [task_title, task_desc, task_status, task_due],
+      (error, results) =>
+    {
       // error handling
       let schema = {
         "name": task_title,
@@ -66,7 +71,6 @@ async function insertTask(task_title, task_desc, task_status, task_due) {
       else {
         resolve(results.rows[0])
       }
-
     })
   })
 }
