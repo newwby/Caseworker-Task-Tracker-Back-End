@@ -9,18 +9,15 @@ const pool = new Pool({
 })
 
 
-const fetchAllUsers = async () => {
+async function fetchAllTasks() {
   return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM tasks ORDER BY id ASC', (error, results) => {
       if (error) {
-        error.message = `Failed to get all users.`
+        error.message = `Failed to get all tasks.`
         return reject(error)
       }
-      else if (results == null) {
-        return reject (new Error('getAllUsers output error.'))
-      }
       else if (results.rows.length === 0) {
-        return reject (new Error('getAllUsers - no users found.'))
+        return reject (new Error('fetchAllTasks - no users found.'))
       }
       else {
         resolve(results.rows)
@@ -30,16 +27,15 @@ const fetchAllUsers = async () => {
 }
 
 
-async function fetchUser(arg_id) {
+async function fetchTask(arg_id) {
   return new Promise((resolve, reject) => {
-    pool.query('SELECT * FROM users WHERE id = $1', [arg_id], (error, results) => {
+    pool.query('SELECT * FROM tasks WHERE id = $1', [arg_id], (error, results) => {
       if (error) {
-        error.message = `Failed to fetch user ${arg_id}.`
+        error.message = `Failed to fetch task ${arg_id}.`
         return reject(error)
       }
       else if (results.rows.length === 0) {
         resolve(null)
-        // return reject (new Error(`User not found.`))
       }
       else {
         resolve(results.rows[0])
@@ -49,17 +45,23 @@ async function fetchUser(arg_id) {
 }
 
 
-async function insertUser(arg_name, arg_email) {
+async function insertTask(task_title, task_desc, task_status, task_due) {
   return new Promise((resolve, reject) => {
-    pool.query(`INSERT INTO users (name, email) VALUES ($1, $2) RETURNING *`, [arg_name, arg_email], (error, results) => {
+    pool.query(`INSERT INTO tasks (title, description, status, due_date) VALUES ($1, $2, $3, $4) RETURNING *`,\
+          [task_title, task_desc, task_status, task_due], (error, results) => {
       // error handling
-      let schema = {"name": arg_name, "email": arg_email}
+      let schema = {
+        "name": task_title,
+        "description": task_desc,
+        "status": task_status,
+        "due_date": task_due,
+      }
       if (error) {
-        error.message = `Failed to add user: ${schema}.`
+        error.message = `Failed to add task: ${JSON.stringify(schema)}.`
         return reject(error)
       }
       else if (results.rows.length === 0) {
-        return reject (new Error(`Did not return new user: ${schema}`))
+        return reject (new Error(`Did not return new task: ${JSON.stringify(schema)}`))
       }
       else {
         resolve(results.rows[0])
@@ -70,28 +72,28 @@ async function insertUser(arg_name, arg_email) {
 }
 
 
-async function updateUser(arg_id, arg_name, arg_email) {
+async function updateTaskStatus(task_id, task_status) {
   return new Promise((resolve, reject) => {
-    pool.query('UPDATE users SET name = $1, email = $2 WHERE id = $3 RETURNING *',
-    [arg_name, arg_email, arg_id],
+    pool.query('UPDATE tasks SET status = $1 WHERE id = $2 RETURNING *',
+    [task_status, task_id],
     (error, results) => {
       if (error) {
-        error.message = `Failed to modify user ${arg_id}.`
+        error.message = `Failed to modify task ${task_id}.`
         return reject(error)
       }
       else {
-        resolve(results.rows)
+        resolve(results.rows[0])
       }
     })
   })
 }
 
 
-async function deleteUser(arg_id) {
+async function deleteTask(task_id) {
   return new Promise((resolve, reject) => {
-    pool.query('DELETE FROM users WHERE id = $1', [arg_id], (error, results) => {
+    pool.query('DELETE FROM tasks WHERE id = $1', [task_id], (error, results) => {
       if (error) {
-        error.message = `Could not delete user ${arg_id}.`
+        error.message = `Could not delete task ${task_id}.`
         return reject(error)
       }
       else {
@@ -103,9 +105,9 @@ async function deleteUser(arg_id) {
 
 
 module.exports = {
-  fetchAllUsers,
-  fetchUser,
-  insertUser,
-  updateUser,
-  deleteUser,
+  fetchAllTasks,
+  fetchTask,
+  insertTask,
+  updateTaskStatus,
+  deleteTask,
 }
