@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 const mid = require('./src/api/middleware/taskMiddleware')
 const con = require('./src/api/controllers/taskController')
 const app = express()
@@ -11,8 +12,16 @@ app.use(
   })
 )
 
+app.use(cors({
+  origin: ['http://localhost:8080', 'http://127.0.0.1:8080']
+}));
+
+app.get('/test', (req, res) => {
+  res.json({ message: "CORS test successful" });
+});
+
 app.get('/', (request, response) => {
-  response.json({ info: 'Node.js, Express, and Postgres API' })
+  response.json({ info: 'Task tracker endpoint documentation available at https://github.com/hmct-application-projects/task-tracker-backend' })
 })
 
 
