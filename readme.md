@@ -59,12 +59,9 @@ This project is intended to run locally and is not production ready.
 # Setting up
 
 ### Install dependencies
-
+_One line installation_
 ```
-npm install express @4.21.2
-npm install pg @8.13.3
-npm install dotenv @16.4.7
-npm install cors @2.8.5
+npm install express@4.21.2 pg@8.13.3 dotenv@16.4.7 cors@2.8.5
 ```
 
 ### Install postgreSQL and log in as the superuser. Create a 'caseworker' role and grant it database creation permission.
