@@ -21,9 +21,6 @@ describe("Controller Unit Test Suite", () => {
     });
 });
 
-// tests below are from restful api template and need adjustments made to function
-// as such they are temporarily disabled
-
 // unit tests with taskService mocked
 describe('getTaskById Tests', () => {
 
@@ -121,6 +118,12 @@ describe('createTask Tests', () => {
         });
     });
 })
+
+
+// TODO - resume test development, these tests do not currently pass
+// tests below are from restful api template and need adjustments made to function
+// as such they are temporarily disabled
+// see https://github.com/newwby/Task-tracker-back-end/issues/3 for full list of planned tasks
 
 /*
 // unit tests broken into test suites for each function
