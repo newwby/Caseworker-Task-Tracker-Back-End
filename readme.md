@@ -111,3 +111,16 @@ DB_DATABASE=tasks
 DB_PASSWORD=password
 DB_PORT=5432
 ```
+
+### Run the server
+
+```
+node index.js
+```
+
+ # Information
+ ### Counterpart
+ For use with client at [https://github.com/hmct-application-projects/task-tracker-frontend](https://github.com/hmct-application-projects/task-tracker-frontend)
+ 
+ ### Address
+ - by default runs at [http://127.0.0.1:3000/](http://127.0.0.1:3000/)
