@@ -23,7 +23,7 @@ describe("Controller Unit Test Suite", () => {
 
 // tests below are from restful api template and need adjustments made to function
 // as such they are temporarily disabled
-/*
+
 // unit tests with taskService mocked
 describe('getTaskById Tests', () => {
 
@@ -38,19 +38,25 @@ describe('getTaskById Tests', () => {
 
     // success test
     test('should return task data when task exists', async () => {
-        const mockTask = { id: 1, name: 'John Doe' };
-        taskService.fetchUser.mockResolvedValue(mockUser);
+        const mockTask = {
+            id: 1,
+            title: 'Sample task',
+            description: 'Example task for mock',
+            status: 'Solved',
+            due_date: '2025-04-28'
+        };
+        taskService.fetchTask.mockResolvedValue(mockTask);
         req.id = 1;
         await taskController.getTaskById(req, res);
 
         expect(res.status).toHaveBeenCalledWith(200);
-        expect(res.json).toHaveBeenCalledWith({ data: mockUser });
+        expect(res.json).toHaveBeenCalledWith({ data: mockTask });
     });
 
     // need integration test with middleware checking for task id (need to test 404 response)
     // error test
     test('should return 500 if taskService throws an error', async () => {
-        taskService.fetchUser.mockRejectedValue(new Error('Database connection failed'));
+        taskService.fetchTask.mockRejectedValue(new Error('Database connection failed'));
         req.id = 1;
         await taskController.getTaskById(req, res);
 
@@ -62,7 +68,7 @@ describe('getTaskById Tests', () => {
     });
 });
 
-
+/*
 // unit tests broken into test suites for each function
 describe('createTask Tests', () => {
     
