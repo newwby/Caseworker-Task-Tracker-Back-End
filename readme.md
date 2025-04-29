@@ -72,15 +72,18 @@ npm install express@4.21.2 pg@8.13.3 dotenv@16.4.7 cors@2.8.5
 
 **_As I'm sure you're aware - you should change that sample username, and that password is strongly discouraged._**
 
-### Exit PostgreSQL from previous session, log in as 'caseworker' user & create the tasks database.
+### Exit PostgreSQL from previous session, log in as 'caseworker' user, create the database and grant db permissions.
 
 1. \q
 1. psql -d postgres -U caseworker
 1. CREATE DATABASE tasks;
+1. \c tasks
+1. GRANT USAGE, CREATE ON SCHEMA public TO caseworker;
 
-### Run 'schema.sql' to create the tasks table and populate it with test data.
-**Ensure your schema.sql contains the following**
+### As per 'schema.sql', create the tasks table and populate it with test data.
+**Run the following SQL commands from the task database**
 
+1. **Mandatory: create the tasks table**
 ```
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
@@ -89,18 +92,14 @@ CREATE TABLE tasks (
     status VARCHAR(50) NOT NULL,
     due_date TIMESTAMP
 );
-
+```
+2. **Optional: add dummy data**
+```
 INSERT INTO tasks (title, description, status, due_date)
     VALUES
     ('demo task', 'sample task for database testing', 'complete', '2025-04-28'),
     ('example task', 'you need example tasks', 'complete', '2025-04-28');
 ```
-
-### Log into the tasks database and execute the schema.sql file with the following command:
-* psql -U caseworker -d tasks
-* \i repo_path/db/schema.sql
-
-**_Alternatively you can copy and paste the create table command and ignore the dummy data._**
 
 ### Set up your environment variables:
 *Create a `.env` file and include the following:*
