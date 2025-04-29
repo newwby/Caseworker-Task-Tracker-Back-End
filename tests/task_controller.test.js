@@ -68,7 +68,7 @@ describe('getTaskById Tests', () => {
     });
 });
 
-/*
+
 // unit tests broken into test suites for each function
 describe('createTask Tests', () => {
     
@@ -79,22 +79,40 @@ describe('createTask Tests', () => {
         res = httpMocks.createResponse();
         res.status = jest.fn().mockReturnValue(res);
         res.json = jest.fn();
-        req.body = {"email": "jane@doemail.com", "name": 'Jane Doe'};
+        req.body = {
+            "id": 1,
+            "title": 'Sample task',
+            "description": 'Example task for mock',
+            "status": 'Solved',
+            "due_date": '2025-04-28'
+        };
     });
 
     // success test
     test('should return confirmation of new task when created', async () => {
-        const mockCreatedUser = {email: 'jane@doemail.com', name: 'Jane Doe' };
-        taskService.insertUser.mockResolvedValue(mockCreatedUser)
+        const mockCreatedTask = {
+            id: 1,
+            title: 'Sample task',
+            description: 'Example task for mock',
+            status: 'Solved',
+            due_date: '2025-04-28'
+        };
+        taskService.insertTask.mockResolvedValue(mockCreatedTask)
         await taskController.createTask(req, res);
         expect(res.status).toHaveBeenCalledWith(201)
-        expect(res.json).toHaveBeenCalledWith({"data": mockCreatedUser})
+        expect(res.json).toHaveBeenCalledWith({"data": mockCreatedTask})
     });
 
     // failure test
     test('should return error message if new task not created', async () => {
-        const mockError = new Error(`Failed to add task: ${{"name": req.body.name, "email": req.body.email}}`)
-        taskService.insertUser.mockRejectedValue(mockError)
+        const mockErrorOutput = {
+            "title": req.body.title,
+            "description": req.body.description,
+            "status": req.body.status,
+            "due_date": req.body.due_date,
+        }
+        const mockError = new Error(`Failed to add task: ${mockErrorOutput}`)
+        taskService.insertTask.mockRejectedValue(mockError)
         await taskController.createTask(req, res)
         expect(res.status).toHaveBeenCalledWith(500)
         expect(res.json).toHaveBeenCalledWith({
@@ -104,6 +122,7 @@ describe('createTask Tests', () => {
     });
 })
 
+/*
 // unit tests broken into test suites for each function
 describe('changeTaskStatus Tests', () => {
     
@@ -122,7 +141,7 @@ describe('changeTaskStatus Tests', () => {
     // changeTaskStatus success test
     test('should return new task values if update successful', async () => {
         const mockUpdatedUser = {"id": req.id, "name": req.body.name, "email": req.body.email}
-        taskService.insertUser.mockResolvedValue(mockUpdatedUser)
+        taskService.createTask.mockResolvedValue(mockUpdatedUser)
         await taskController.updateUser(req, res);
         expect(res.status).toHaveBeenCalledWith(200)
         expect(res.json).toHaveBeenCalledWith({"data": mockUpdatedUser})
@@ -131,7 +150,7 @@ describe('changeTaskStatus Tests', () => {
     // changeTaskStatus failure test
     test('should return error message if update fails', async () => {
         const mockError = new Error(`Did not return task!`)
-        taskService.insertUser.mockRejectedValue(mockError)
+        taskService.createTask.mockRejectedValue(mockError)
         await taskController.createTask(req, res)
         expect(res.status).toHaveBeenCalledWith(500)
         expect(res.json).toHaveBeenCalledWith({
