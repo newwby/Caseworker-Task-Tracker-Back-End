@@ -9,8 +9,8 @@ jest.mock('../src/api/services/taskService');
 describe("Controller Unit Test Suite", () => {
 
     test("GetAllTasks", async () => {
-        const req = httpMocks.createRequest()
-        const res = httpMocks.createResponse
+        const req = httpMocks.createRequest();
+        const res = httpMocks.createResponse();
         res.json = jest.fn()
         res.status = jest.fn().mockReturnValue(res);
 
